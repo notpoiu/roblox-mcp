@@ -12,7 +12,7 @@ A Model Context Protocol (MCP) server that provides full control and introspecti
 
 ## Prerequisites
 
-- **Roblox Executor**: You need a Roblox executor (like Seliware, Volt, etc) that supports `loadstring`, `HttpGet`, and _preferably_ `WebSocket`.
+- **Roblox Executor**: You need a Roblox executor (like Seliware, Volt, etc) that supports `loadstring`, `request`, and _preferably_ `WebSocket`.
 - **Node.js**: Version 18 or higher.
 
 ## Installation
