@@ -59,12 +59,11 @@ Add this to your `claude_desktop_config.json`:
 In your Roblox executor, run the contents of `connector.luau`. You can also use this quick loader:
 
 ```lua
--- getgenv().BridgeURL = "10.0.0.4:16384"
+-- getgenv().BridgeURL = "10.0.0.4:16384" (defaults to localhost, dont change unless you know what you are doing!)
 -- getgenv().DisableWebSocket = true
 loadstring(game:HttpGet("https://raw.githubusercontent.com/notpoiu/roblox-mcp/refs/heads/main/connector.luau"))()
 ```
 
-_(Make sure to replace the URL with your actual hosted script or paste the file contents directly)_
 
 ## Available Tools
 
