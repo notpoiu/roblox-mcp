@@ -391,7 +391,7 @@ while true do
     end)
 
     Bridge:BindToType("search-scripts-sources", function(data)
-        assert(ScriptSourcesMap.HasFinishedMapping, "The bridge is still mapping all script sources (" .. MappedSources .. "/" .. SourcesToMap .. ") please try again later.")
+        assert(ScriptSourcesMap.HasFinishedMapping, "The bridge is still mapping all script sources (" .. tostring(MappedSources) .. "/" .. tostring(SourcesToMap) .. ") please try again later.")
         
         local results = {}
         local limit = data.limit or 50
