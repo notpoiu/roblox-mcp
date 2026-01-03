@@ -74,10 +74,25 @@ local BaseBridge = {}; do
     
     function BaseBridge:IsAlive()
         local success, result = pcall(function()
-            local response = request({
-                Url = "http://" .. BridgeURL,
-                Method = "GET"
-            })
+            local response
+            local thread = task.spawn(function()
+                local success, data = request({
+                    Url = "http://" .. BridgeURL,
+                    Method = "GET"
+                })
+
+                if success then
+                    response = data
+                end
+            end)
+
+            local start = os.clock()
+            repeat task.wait() until response ~= nil or os.clock() - start > 5
+
+            if response == nil then
+                task.cancel(thread)
+                return false
+            end
     
             -- 426 = Upgrade Required (WebSocket), 200 = HTTP mode
             if response.StatusCode == 426 or response.StatusCode == 200 then
@@ -168,6 +183,8 @@ local HTTPBridge = setmetatable({}, {__index = BaseBridge}); do
     
         --// Start polling thread \\--
         self.PollThread = task.spawn(function()
+            local consecutiveFailures = 0
+            
             while self.Connected do
                 local success, err = pcall(function()
                     local response = request({
@@ -177,12 +194,15 @@ local HTTPBridge = setmetatable({}, {__index = BaseBridge}); do
 
                     --// Server might be down \\--
                     if response.StatusCode ~= 204 and response.StatusCode ~= 200 then
-                        if not self:IsAlive() then
+                        consecutiveFailures += 1
+                        if consecutiveFailures >= 3 then
                             self.Connected = false
                         end
 
                         return
                     end
+                    
+                    consecutiveFailures = 0
     
                     --// Handle response \\--
                     if response.Body and response.Body ~= "" then
@@ -205,7 +225,8 @@ local HTTPBridge = setmetatable({}, {__index = BaseBridge}); do
                 end)
     
                 if not success then
-                    if not self:IsAlive() then
+                    consecutiveFailures += 1
+                    if consecutiveFailures >= 3 then
                         self.Connected = false
                     end
                 end
@@ -545,7 +566,7 @@ while true do
             
             --// Rate limit \\--
             count += 1
-            if count % 250 == 0 then task.wait() end
+            if count % 50 == 0 then task.wait(0.1) end
 
             --// Split source into lines \\--
             local lines = {}
