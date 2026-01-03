@@ -531,7 +531,15 @@ server.registerTool(
 
     if (response === undefined || response.output === undefined) {
       return {
-        content: [{ type: "text", text: "Failed to search scripts." }],
+        content: [
+          {
+            type: "text",
+            text:
+              "Failed to search scripts (error occured? Response: " +
+              JSON.stringify(response) +
+              ")",
+          },
+        ],
       };
     }
 

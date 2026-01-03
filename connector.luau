@@ -318,6 +318,11 @@ do
 end
 
 --// Parse Query \\--
+local function ConvertEscapes(str)
+    local ConvertedStr = str:gsub("\\n", "\n"):gsub("\\r", "\r"):gsub("\\t", "\t")
+    return ConvertedStr
+end
+
 local function ParseQuery(query)
     local stringMatchQueries = {}
     do  
@@ -367,8 +372,16 @@ local function ParseQuery(query)
         end
 
         for _, query in queries do
-            if typeof(query) == "string" and query == "" then continue end
-            table.insert(stringMatchQueries, query)
+            if typeof(query) == "string" then
+                if query == "" then continue end
+                table.insert(stringMatchQueries, ConvertEscapes(query))
+            elseif typeof(query) == "table" and query.AndQueries then
+                local convertedAnd = {}
+                for _, andQuery in query.AndQueries do
+                    table.insert(convertedAnd, ConvertEscapes(andQuery))
+                end
+                table.insert(stringMatchQueries, { AndQueries = convertedAnd })
+            end
         end
     end
 
