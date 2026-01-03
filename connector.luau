@@ -76,7 +76,7 @@ local BaseBridge = {}; do
         local success, result = pcall(function()
             local response
             local thread = task.spawn(function()
-                local success, data = request({
+                local success, data = pcall(request, {
                     Url = "http://" .. BridgeURL,
                     Method = "GET"
                 })
@@ -328,14 +328,16 @@ do
     SourcesToMap = #scripts
 
     --// Map script sources \\--
-    for idx, scriptObject in scripts do
-        if not ShouldMapScript(scriptObject) then continue end
-        MapScriptSource(scriptObject)
-
-        if idx % 250 == 0 then task.wait(0.5) end
-    end
-
-    ScriptSourcesMap.HasFinishedMapping = true
+    task.spawn(function()
+        for idx, scriptObject in scripts do
+            if not ShouldMapScript(scriptObject) then continue end
+            MapScriptSource(scriptObject)
+    
+            if idx % 250 == 0 then task.wait(0.5) end
+        end
+    
+        ScriptSourcesMap.HasFinishedMapping = true
+    end)
 end
 
 --// Parse Query \\--
