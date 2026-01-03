@@ -504,6 +504,13 @@ server.registerTool(
         )
         .optional()
         .default(50),
+      contextLines: z
+        .number()
+        .describe(
+          "Number of lines of context to return before and after the matching line (default: 2)"
+        )
+        .optional()
+        .default(2),
     }),
   },
   async ({ query, limit }) => {
