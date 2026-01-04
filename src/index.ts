@@ -321,7 +321,7 @@ server.registerTool(
     console.error(`Executing code in thread ${threadContext}...`);
 
     const toolCallId = SendArbitraryDataToClient("get-data-by-code", {
-      source: `setthreadidentity(${threadContext})\n${code}`,
+      source: `setthreadidentity(${threadContext});${code}`,
     });
 
     if (toolCallId === null) {
