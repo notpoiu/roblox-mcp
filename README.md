@@ -70,6 +70,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/notpoiu/roblox-mcp/re
 - `execute`: Runs Lua code. Use for actions (e.g., `game.Players.LocalPlayer.Character.Humanoid.Health = 0`).
 - `get-data-by-code`: Runs Lua code and returns the result. Use for querying state (e.g., `return workspace.Part.Position`).
 - `get-script-content`: Gets the decompiled output of a script via `scriptPath` (e.g., `game.Players.LocalPlayer.PlayerScripts.LocalScript`) or `scriptGetterSource` (more advanced).
+- `search-scripts-sources`: Search for keywords in scripts via `keyword` (e.g., `"print("hello")`).
 - `get-console-output`: Returns the recent developer console logs.
 - `search-instances`: Search for objects using a selector (e.g., `Part.Tagged[Anchored=false]`).
 - `get-game-info`: Returns PlaceId, GameId, and more misc data.
